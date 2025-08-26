@@ -10,6 +10,11 @@ const userSchema = new Schema<TUser, UserModel>(
       required: true,
       unique: [true, 'ID is duplicate'],
     },
+    email: {
+      type: String,
+      required: true,
+      unique: [true, 'Email is duplicate'],
+    },
     password: {
       type: String,
       required: true,

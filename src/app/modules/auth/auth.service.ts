@@ -12,6 +12,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { sendEmail } from '../../utils/sendEmail';
 
 const loginUser = async (payload: TLoginUser) => {
   const user = await isUserExistsWithErrorMessageByCustomId(payload.id);
@@ -186,7 +187,11 @@ const forgatPassword = async (id: string) => {
   );
 
   const resetUILink = `http://localhost:3000?id=${user.id}&token=${resetToken}`;
+
+  sendEmail(user.email, resetUILink);
+
   console.log(resetUILink);
+
   return null;
 };
 

@@ -5,6 +5,7 @@ export type TRole = 'admin' | 'student' | 'faculty';
 
 export interface TUser {
   id: string;
+  email: string;
   password: string;
   needsPasswordChange: boolean;
   passwordChangedAt?: Date;

@@ -15,8 +15,8 @@ export const sendEmail = async (to: string, html: string) => {
   await transporter.sendMail({
     from: config.node_mailer_user,
     to: to,
-    subject: 'Forget Password',
-    text: 'Reset Your password within 10 min!', // plain‑text body
+    subject: 'Reset Your password within 10 min!',
+    text: '', // plain‑text body
     html: html, // HTML body
   });
 };

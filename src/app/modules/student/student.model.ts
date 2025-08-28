@@ -7,7 +7,7 @@ import {
   TStudent,
 } from './student.interface';
 import checkDuplicate from '../../errors/checkDuplicate';
-import { userNameSchema } from '../../schema/module.commonSchema';
+import { userNameSchema } from '../../commonSchema/module.commonSchema';
 import {
   BloodGroup,
   BloodGroupErrorMessage,

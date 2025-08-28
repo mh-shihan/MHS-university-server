@@ -2,7 +2,7 @@ import status from 'http-status';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import { TJwtPayload } from './auth.interface';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 
 export const isUserExistsWithErrorMessageByCustomId = async (id: string) => {
@@ -39,4 +39,8 @@ export const createRefreshToken = (jwtPayload: TJwtPayload) => {
     config.jwt_refresh_token_secret as string,
     config.jwt_refresh_expires_in as string,
   );
+};
+
+export const verifyToken = (token: string, secret: string) => {
+  return jwt.verify(token, secret) as JwtPayload;
 };

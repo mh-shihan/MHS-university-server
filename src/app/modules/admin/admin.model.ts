@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { AdminModel, TAdmin } from './admin.interface';
-import { userNameSchema } from '../../schema/module.commonSchema';
+import { userNameSchema } from '../../commonSchema/module.commonSchema';
 import { BloodGroup, Gender } from '../../constants/model.constant';
 
 const adminSchema = new Schema<TAdmin, AdminModel>(

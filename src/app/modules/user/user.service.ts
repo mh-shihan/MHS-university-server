@@ -7,11 +7,12 @@ import { Student } from '../student/student.model';
 import { TRole, TUser } from './user.interface';
 import { User } from './user.model';
 import { generatedStudentId, generateUserIdByRole } from './user.utils';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
 import { Admin } from '../admin/admin.model';
 import { TAdmin } from '../admin/admin.interface';
+import checkDocumentExistsById from '../../utils/checkDocumentExistsById';
 
 // CREATE STUDENT
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
@@ -155,8 +156,34 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
   }
 };
 
+// GET ME
+const getMe = async (userId: string, role: string) => {
+  let result = null;
+  if (role === 'student') {
+    result = await Student.findOne({ id: userId }).populate('user');
+  }
+  if (role === 'admin') {
+    result = await Admin.findOne({ id: userId }).populate('user');
+  }
+
+  if (role === 'faculty') {
+    result = await Faculty.findOne({ id: userId }).populate('user');
+  }
+
+  return result;
+};
+
+const changeStatus = async (id: string, payload: { status: string }) => {
+  await checkDocumentExistsById(User, new Types.ObjectId(id), 'User');
+
+  const result = await User.findByIdAndUpdate(id, payload, { new: true });
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMe,
+  changeStatus,
 };

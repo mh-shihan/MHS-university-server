@@ -2,10 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../errors/AppError';
 import status from 'http-status';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { TUserRole } from '../modules/user/user.interface';
-import { isUserExistsWithErrorMessageByCustomId } from '../modules/auth/auth.utils';
+import {
+  isUserExistsWithErrorMessageByCustomId,
+  verifyToken,
+} from '../modules/auth/auth.utils';
 import { User } from '../modules/user/user.model';
 
 const auth = (...requiredRoles: TUserRole[]) => {
@@ -17,10 +20,10 @@ const auth = (...requiredRoles: TUserRole[]) => {
     }
 
     // Check if the token is valid
-    const decoded = jwt.verify(
+    const decoded = verifyToken(
       token,
       config.jwt_access_token_secret as string,
-    ) as JwtPayload;
+    );
 
     const { role, userId, iat } = decoded;
 

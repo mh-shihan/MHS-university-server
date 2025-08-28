@@ -60,12 +60,13 @@ const forgatPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const userId = req.body.id;
-  const result = await AuthServices.forgatPassword(userId);
+  const token = req.headers.authorization;
+
+  const result = await AuthServices.resetPassword(req.body, token as string);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
-    message: 'Reset link is generated successfully!',
+    message: 'Password reset successfully!',
     data: result,
   });
 });

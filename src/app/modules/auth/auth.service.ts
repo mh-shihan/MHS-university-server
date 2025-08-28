@@ -190,7 +190,56 @@ const forgatPassword = async (id: string) => {
 
   sendEmail(user.email, resetUILink);
 
+  return null;
   // console.log(resetUILink);
+};
+
+const resetPassword = async (
+  payload: { id: string; newPassword: string },
+  token: string,
+) => {
+  const user = await isUserExistsWithErrorMessageByCustomId(payload?.id);
+
+  //   checking if the user is already deleted
+  const isDeleted = user?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(status.FORBIDDEN, 'This user is deleted!');
+  }
+
+  // checking if the user is blocked
+  const userStatus = user?.status;
+
+  if (userStatus === 'blocked') {
+    throw new AppError(status.FORBIDDEN, 'This user is blocked!');
+  }
+
+  // Verify Token
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_token_secret as string,
+  ) as JwtPayload;
+
+  if (payload.id !== decoded.userId) {
+    throw new AppError(status.FORBIDDEN, 'You are forbidden!');
+  }
+
+  // Hash new password
+  const newHashedPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt_rounds),
+  );
+
+  await User.findOneAndUpdate(
+    { id: decoded.userId, role: decoded.role },
+    {
+      password: newHashedPassword,
+      passwordChangedAt: new Date(),
+    },
+  );
+
+  return null;
+  // console.log(decoded);
 };
 
 export const AuthServices = {
@@ -198,4 +247,5 @@ export const AuthServices = {
   changePassword,
   refreshToken,
   forgatPassword,
+  resetPassword,
 };

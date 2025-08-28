@@ -3,22 +3,20 @@ import config from '../config';
 
 export const sendEmail = async (to: string, html: string) => {
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
+    host: config.node_mailer_host,
+    port: Number(config.node_mailer_port),
     secure: config.node_env === 'production', // true for 465, false for other ports
     auth: {
-      user: 'mahmodul.no.1@gmail.com',
-      pass: 'ydik yvks hsgd adjl',
+      user: config.node_mailer_user,
+      pass: config.node_mailer_pass,
     },
   });
 
-  const info = await transporter.sendMail({
-    from: 'mahmodul.no.1@gmail.com',
+  await transporter.sendMail({
+    from: config.node_mailer_user,
     to: to,
     subject: 'Forget Password',
     text: 'Reset Your password within 10 min!', // plain‑text body
-    html: ``, // HTML body
+    html: html, // HTML body
   });
-
-  console.log('Message sent:', info.messageId);
 };

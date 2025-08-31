@@ -18,4 +18,7 @@ export default {
   node_mailer_port: process.env.NODE_MAILER_PORT,
   node_mailer_user: process.env.NODE_MAILER_USER,
   node_mailer_pass: process.env.NODE_MAILER_PASS,
+  cloudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
+  cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
 };

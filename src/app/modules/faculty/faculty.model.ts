@@ -96,9 +96,9 @@ facultySchema.pre('aggregate', function (next) {
 });
 
 //checking if user is already exist!
-facultySchema.statics.isUserExists = async function (id: string) {
-  const existingUser = await Faculty.findOne({ id });
-  return existingUser;
+facultySchema.statics.isFacultyExists = async function (id: string) {
+  const existingFaculty = await Faculty.findOne({ id });
+  return existingFaculty;
 };
 
 export const Faculty = model<TFaculty, FacultyModel>('Faculty', facultySchema);

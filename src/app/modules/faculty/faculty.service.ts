@@ -65,7 +65,7 @@ const updateFacultyIntoDB = async (id: string, payload: Partial<TFaculty>) => {
 };
 
 const deleteSingleFacultyFromDB = async (id: string) => {
-  const isFacultyExist = await Faculty.isUserExists(id);
+  const isFacultyExist = await Faculty.isFacultyExists(id);
   if (!isFacultyExist) {
     throw new AppError(status.NOT_FOUND, 'Faculty Not Found!');
   }

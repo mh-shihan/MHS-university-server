@@ -36,6 +36,9 @@ const offeredCourseSchema = new mongoose.Schema<TOfferedCourse>(
     },
     maxCapacity: {
       type: Number,
+      min: 0,
+      max: [50, 'Max Capacity is not more than 50!'],
+      default: 50,
       required: true,
     },
     section: {

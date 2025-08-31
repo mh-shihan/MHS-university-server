@@ -1,21 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TErrorSources, TGenericErrorResponse } from '../interface/error';
 
-const handleDuplicateError = (err): TGenericErrorResponse => {
-  const path: string[] = Object.keys(err?.keyValue);
+const handleDuplicateError = (err: any): TGenericErrorResponse => {
+  const statusCode = 400;
 
-  // Extract value within double quotes using regex
-  const match = err?.errorResponse?.errmsg.match(/"([^"]*)"/);
-  //   The Extracted value will be the first capturing group
-  const extractMessage = match && match[1];
+  const fields = Object.keys(err?.keyValue || {});
+  const duplicateValue = Object.values(err?.keyValue || {})[0];
 
   const errorSources: TErrorSources = [
     {
-      path: path[0],
-      message: `${extractMessage} is already exists!`,
+      path: fields[0] || '',
+      message: `${duplicateValue} already exists!`,
     },
   ];
-
-  const statusCode = 400;
 
   return {
     statusCode,
@@ -23,4 +20,5 @@ const handleDuplicateError = (err): TGenericErrorResponse => {
     errorSources,
   };
 };
+
 export default handleDuplicateError;

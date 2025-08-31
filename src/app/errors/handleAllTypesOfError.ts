@@ -6,7 +6,6 @@ import handleDuplicateError from './handleDuplicateError';
 import handleValidationError from './handleValidationError';
 import handleZodError from './handleZodError';
 import { TErrorSources, TGenericErrorResponse } from '../interface/error';
-import getDuplicateKeyMessage from './getDuplicateKeyMessage';
 
 const handleAllTypesOfError = (err: any): TGenericErrorResponse => {
   let statusCode = 500;
@@ -60,14 +59,6 @@ const handleAllTypesOfError = (err: any): TGenericErrorResponse => {
     // console.log('--------------- AppError ---------------------');
   } else if (err instanceof Error) {
     message = err?.message;
-
-    if (typeof err?.message == 'string') {
-      message = getDuplicateKeyMessage(err?.message);
-    }
-
-    if (message === '') {
-      message = err?.message;
-    }
     errorSources = [
       {
         path: '',

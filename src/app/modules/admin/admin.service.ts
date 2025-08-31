@@ -52,7 +52,7 @@ const updateAdminIntoDB = async (id: string, payload: Partial<TAdmin>) => {
 };
 
 const deleteSingleAdminFromDB = async (id: string) => {
-  const isAdminExist = await Admin.isUserExists(id);
+  const isAdminExist = await Admin.isAdminExists(id);
   if (!isAdminExist) {
     throw new AppError(status.NOT_FOUND, 'Admin Not Found!');
   }

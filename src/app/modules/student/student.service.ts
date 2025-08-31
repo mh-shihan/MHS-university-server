@@ -71,7 +71,7 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
 };
 
 const deleteSingleStudentFromDB = async (id: string) => {
-  const isStudentExist = await Student.isUserExists(id);
+  const isStudentExist = await Student.isStudentExists(id);
   if (!isStudentExist) {
     throw new AppError(status.NOT_FOUND, 'Student Not Found!');
   }

@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
-export type TRole = 'admin' | 'student' | 'faculty';
+export type TRole = 'super-admin' | 'admin' | 'student' | 'faculty';
 
 export interface TUser {
   id: string;

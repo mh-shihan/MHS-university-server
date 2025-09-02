@@ -15,6 +15,7 @@ import { Admin } from '../admin/admin.model';
 import { TAdmin } from '../admin/admin.interface';
 import checkDocumentExistsById from '../../utils/checkDocumentExistsById';
 import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
+import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 
 // CREATE STUDENT
 const createStudentIntoDB = async (
@@ -38,6 +39,14 @@ const createStudentIntoDB = async (
     throw new AppError(status.NOT_FOUND, 'Academic semester Not Found');
   }
 
+  const academicDepartment = await checkDocumentExistsById(
+    AcademicDepartment,
+    payload.academicDepartment,
+    'Academic Department',
+  );
+
+  payload.academicFaculty = academicDepartment.academicFaculty;
+
   const session = await mongoose.startSession();
 
   try {
@@ -45,12 +54,16 @@ const createStudentIntoDB = async (
     // Set Generated ID
     userData.id = await generatedStudentId(academicSemester);
 
-    // Set User Image
-    const image_name = `${userData.id}-student-${payload?.name?.firstName}`;
-    const { secure_url } = (await sendImageToCloudinary(
-      image_name,
-      file.path,
-    )) as { secure_url: string };
+    if (file) {
+      // Set User Image
+      const image_name = `${userData.id}-student-${payload?.name?.firstName}`;
+      const { secure_url } = (await sendImageToCloudinary(
+        image_name,
+        file?.path,
+      )) as { secure_url: string };
+
+      payload.profileImg = secure_url;
+    }
 
     // Create a User (Transaction-1)
     const newUser = await User.create([userData], { session });
@@ -61,7 +74,6 @@ const createStudentIntoDB = async (
 
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id; // Reference id
-    payload.profileImage = secure_url;
 
     // Create a Student (Transaction-2)
     const newStudent = await Student.create([payload], { session });
@@ -81,7 +93,11 @@ const createStudentIntoDB = async (
 };
 
 // CREATE FACULTY
-const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
+const createFacultyIntoDB = async (
+  file: any,
+  password: string,
+  payload: TFaculty,
+) => {
   const userData: Partial<TUser> = {};
   userData.password = password || (config.default_password as string);
 
@@ -96,6 +112,17 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     session.startTransaction();
     // Set Generated ID
     userData.id = await generateUserIdByRole(role);
+
+    if (file) {
+      // Set User Image
+      const image_name = `${userData.id}-faculty-${payload?.name?.firstName}`;
+      const { secure_url } = (await sendImageToCloudinary(
+        image_name,
+        file?.path,
+      )) as { secure_url: string };
+
+      payload.profileImg = secure_url;
+    }
 
     // Create a User (Transaction-1)
     const newUser = await User.create([userData], { session });
@@ -117,7 +144,6 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     await session.endSession();
 
     return newFaculty;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
@@ -126,7 +152,11 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 };
 
 // CREATE ADMIN
-const createAdminIntoDB = async (password: string, payload: TAdmin) => {
+const createAdminIntoDB = async (
+  file: any,
+  password: string,
+  payload: TAdmin,
+) => {
   const userData: Partial<TUser> = {};
   userData.password = password || (config.default_password as string);
 
@@ -141,6 +171,17 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     session.startTransaction();
     // Set Generated ID
     userData.id = await generateUserIdByRole(role);
+
+    if (file) {
+      // Set User Image
+      const image_name = `${userData.id}-admin-${payload?.name?.firstName}`;
+      const { secure_url } = (await sendImageToCloudinary(
+        image_name,
+        file?.path,
+      )) as { secure_url: string };
+
+      payload.profileImg = secure_url;
+    }
 
     // Create a User (Transaction-1)
     const newUser = await User.create([userData], { session });
@@ -162,7 +203,6 @@ const createAdminIntoDB = async (password: string, payload: TAdmin) => {
     await session.endSession();
 
     return newAdmin;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();

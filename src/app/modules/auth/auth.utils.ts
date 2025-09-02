@@ -1,9 +1,9 @@
 import status from 'http-status';
 import AppError from '../../errors/AppError';
-import { User } from '../user/user.model';
 import { TJwtPayload } from './auth.interface';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
+import { User } from '../user/user.model';
 
 export const isUserExistsWithErrorMessageByCustomId = async (id: string) => {
   const user = await User.isUserExistsByCustomId(id);

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
 import config from '../config';
@@ -12,7 +13,7 @@ cloudinary.config({
 export const sendImageToCloudinary = async (
   image_name: string,
   path: string,
-) => {
+): Promise<any> => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
       path,

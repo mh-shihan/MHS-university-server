@@ -4,12 +4,12 @@ import AppError from '../errors/AppError';
 import status from 'http-status';
 import { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
-import { TUserRole } from '../modules/user/user.interface';
 import {
   isUserExistsWithErrorMessageByCustomId,
   verifyToken,
 } from '../modules/auth/auth.utils';
 import { User } from '../modules/user/user.model';
+import { TUserRole } from '../modules/User/user.interface';
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {

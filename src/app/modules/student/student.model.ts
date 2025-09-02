@@ -127,7 +127,11 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Schema.Types.ObjectId,
       ref: 'AcademicDepartment',
     },
-    profileImage: { type: String },
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicDepartment',
+    },
+    profileImg: { type: String, default: '' },
     isDeleted: {
       type: Boolean,
       default: false,

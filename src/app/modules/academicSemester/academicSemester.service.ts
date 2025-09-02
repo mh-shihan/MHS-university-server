@@ -3,13 +3,25 @@ import AppError from '../../errors/AppError';
 import { academicSemesterNameCodeMapper } from './academicSemester.constant';
 import { TAcademicSemester } from './academicSemester.interface';
 import { AcademicSemester } from './academicSemester.model';
+import academicSemesterStartEndMonths from './academicSemester.utils';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
   if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
     throw new AppError(status.BAD_REQUEST, 'Invalid Semester code!');
   }
 
-  const result = await AcademicSemester.create(payload);
+  const academicSemesterStartEnd = academicSemesterStartEndMonths(
+    payload.name as string,
+  );
+
+  const updatedData = {
+    ...payload,
+    ...academicSemesterStartEnd,
+  };
+
+  const result = await AcademicSemester.create({
+    ...updatedData,
+  });
   return result;
 };
 

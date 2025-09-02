@@ -32,7 +32,7 @@ const userSchema = new Schema<TUser, UserModel>(
     role: {
       type: String,
       enum: {
-        values: ['super-admin', 'admin', 'student', 'faculty'],
+        values: ['superAdmin', 'admin', 'student', 'faculty'],
         message: '{VALUES} is not a valid role',
       },
     },

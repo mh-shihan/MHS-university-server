@@ -101,6 +101,14 @@ const createFacultyIntoDB = async (
   const userData: Partial<TUser> = {};
   userData.password = password || (config.default_password as string);
 
+  const academicDepartment = await checkDocumentExistsById(
+    AcademicDepartment,
+    payload.academicDepartment,
+    'Academic Department',
+  );
+
+  payload.academicFaculty = academicDepartment.academicFaculty;
+
   // Set Student Role
   const role: TRole = 'faculty';
   userData.role = role;

@@ -136,18 +136,6 @@ const deleteCourseFromDB = async (id: string) => {
   return result;
 };
 
-const getAllCourseFacultiesFromDB = async () => {
-  const result = await CourseFaculty.find()
-    .populate({
-      path: 'course',
-      populate: {
-        path: 'preRequisiteCourses.course', // Adjust this if your schema supports it
-      },
-    })
-    .populate('faculties');
-  return result;
-};
-
 const assignFacultiesWithCourseIntoDB = async (
   id: string,
   faculties: string[],
@@ -194,6 +182,25 @@ const assignFacultiesWithCourseIntoDB = async (
   return result;
 };
 
+const getAllCourseFacultiesFromDB = async () => {
+  const result = await CourseFaculty.find()
+    .populate({
+      path: 'course',
+      populate: {
+        path: 'preRequisiteCourses.course', // Adjust this if your schema supports it
+      },
+    })
+    .populate('faculties');
+  return result;
+};
+
+const getFacultiesWithCourseFromDB = async (courseId: string) => {
+  const result = await CourseFaculty.findOne({ course: courseId }).populate(
+    'faculties',
+  );
+  return result;
+};
+
 const removeFacultiesFromCourseFromDB = async (
   id: string,
   payload: Partial<TCourseFaculty>,
@@ -215,7 +222,8 @@ export const CourseServices = {
   getSingleCourseFromDB,
   updateCourseIntoDB,
   deleteCourseFromDB,
-  getAllCourseFacultiesFromDB,
   assignFacultiesWithCourseIntoDB,
+  getAllCourseFacultiesFromDB,
+  getFacultiesWithCourseFromDB,
   removeFacultiesFromCourseFromDB,
 };

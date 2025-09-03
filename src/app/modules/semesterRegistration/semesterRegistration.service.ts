@@ -8,6 +8,7 @@ import QueryBuilder from '../../builder/QueryBuilder';
 import { RegisteredSemesterStatus } from './semesterRegistration.constant';
 import { OfferedCourse } from '../offeredCourse/offeredCourse.model';
 import mongoose from 'mongoose';
+import checkDocumentExistsById from '../../utils/checkDocumentExistsById';
 
 const createSemesterRegistrationIntoDB = async (
   payload: TSemesterRegistration,
@@ -30,12 +31,11 @@ const createSemesterRegistrationIntoDB = async (
     );
   }
   // Check If the semester is already exists?
-  const isAcademicSemesterExists =
-    await AcademicSemester.findById(academicSemester);
-
-  if (!isAcademicSemesterExists) {
-    throw new AppError(status.NOT_FOUND, 'This academic semester is not found');
-  }
+  await checkDocumentExistsById(
+    AcademicSemester,
+    academicSemester,
+    'Academic Semester',
+  );
 
   // Check if the semester is already registered?
   const isSemesterRegistrationExists = await SemesterRegistration.findOne({
@@ -126,7 +126,7 @@ const updateSemesterRegistrationIntoDB = async (
 const deleteSemesterRegistrationFromDB = async (id: string) => {
   /** 
   * Step1: Delete associated offered courses.
-  * Step2: Delete semester registraton when the status is 
+  * Step2: Delete semester registration when the status is 
   'UPCOMING'.
   **/
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary, UploadApiResponse } from 'cloudinary';
 import fs from 'fs';
 import config from '../config';
 import multer from 'multer';
@@ -17,12 +17,12 @@ export const sendImageToCloudinary = async (
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
       path,
-      { public_id: image_name },
+      { public_id: image_name.trim() },
       function (error, result) {
         if (error) {
           reject(error);
         }
-        resolve(result);
+        resolve(result as UploadApiResponse);
 
         // delete a file asynchronously
         fs.unlink(path, (err) => {

@@ -9,15 +9,20 @@ import mongoose from 'mongoose';
 import { User } from '../user/user.model';
 
 const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
-  const AdminQuery = new QueryBuilder(Admin.find(), query)
+  const adminQuery = new QueryBuilder(Admin.find(), query)
     .search(AdminSearchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
 
-  const result = await AdminQuery.modelQuery;
-  return result;
+  const result = await adminQuery.modelQuery;
+  const meta = await adminQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
 };
 
 const getSingleAdminFromDB = async (id: string) => {

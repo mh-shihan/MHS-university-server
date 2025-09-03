@@ -14,15 +14,15 @@ const offeredCourseSchema = new mongoose.Schema<TOfferedCourse>(
       required: true,
       ref: 'AcademicSemester',
     },
-    academicFaculty: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'AcademicFaculty',
-    },
     academicDepartment: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'AcademicDepartment',
+    },
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'AcademicFaculty',
     },
     course: {
       type: Schema.Types.ObjectId,

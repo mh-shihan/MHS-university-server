@@ -22,7 +22,6 @@ const sendResponse = <T>(res: Response, data: TResponse<T>) => {
     meta: data.meta,
     data: data.data,
   });
-  return;
 };
 
 export default sendResponse;

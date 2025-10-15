@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import cookieParser from 'cookie-parser';
 import express, { Application } from 'express';
 import cors from 'cors';
@@ -22,9 +23,9 @@ app.use('/api/v1', router);
 // app.get('/', test);
 
 // Global Error Handler
-app.use(globalErrorHandler);
+app.use(globalErrorHandler as any);
 
 // Not Found Route
-app.use(notFound);
+app.use(notFound as any);
 
 export default app;

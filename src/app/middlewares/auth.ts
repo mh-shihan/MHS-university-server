@@ -9,7 +9,7 @@ import {
   verifyToken,
 } from '../modules/auth/auth.utils';
 import { User } from '../modules/user/user.model';
-import { TUserRole } from '../modules/User/user.interface';
+import { TUserRole } from '../modules/user/user.interface';
 
 const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -19,11 +19,17 @@ const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(status.UNAUTHORIZED, 'You are not authorized!');
     }
 
-    // Check if the token is valid
-    const decoded = verifyToken(
-      token,
-      config.jwt_access_token_secret as string,
-    );
+    let decoded;
+
+    try {
+      decoded = verifyToken(
+        token,
+        config.jwt_access_token_secret as string,
+      ) as JwtPayload;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      throw new AppError(status.UNAUTHORIZED, ' Unauthorized!');
+    }
 
     const { role, userId, iat } = decoded;
 

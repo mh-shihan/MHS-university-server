@@ -111,9 +111,9 @@ const refreshToken = async (token: string) => {
     throw new AppError(status.UNAUTHORIZED, 'You are not authorized!');
   }
 
-  // Check if the token is valid
   const decoded = verifyToken(token, config.jwt_refresh_token_secret as string);
 
+  // Check if the token is valid
   const { userId, iat } = decoded;
 
   const user = await isUserExistsWithErrorMessageByCustomId(userId);

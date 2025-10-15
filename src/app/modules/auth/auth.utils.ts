@@ -42,5 +42,12 @@ export const createRefreshToken = (jwtPayload: TJwtPayload) => {
 };
 
 export const verifyToken = (token: string, secret: string) => {
-  return jwt.verify(token, secret) as JwtPayload;
+  let decoded: JwtPayload;
+  try {
+    decoded = jwt.verify(token, secret) as JwtPayload;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    throw new AppError(status.UNAUTHORIZED, 'You are not authorized!');
+  }
+  return decoded;
 };
